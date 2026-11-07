@@ -3,10 +3,18 @@ fn main() -> anyhow::Result<()> {
         ..Default::default()
     };
 
-    eframe::run_ui_native("Genomskinlig", options, |ui, frame| {
-        egui::CentralPanel::default().show(ui, |ui| {
-            ui.heading("Genomskinlig");
-        });
+    let mut files = None;
+
+    eframe::run_ui_native("Genomskinlig", options, move |ui, frame| {
+        if ui.button("Open file").clicked() {
+            files = rfd::FileDialog::new().pick_files();
+        }
+
+        if let Some(ref files) = files {
+            for file in files {
+                ui.monospace(file.display().to_string());
+            }
+        }
     })?;
 
     Ok(())
