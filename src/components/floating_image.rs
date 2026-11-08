@@ -23,7 +23,7 @@ impl FloatingImage {
         use egui::Widget;
 
         let response = egui::Area::new(egui::Id::unique(&self.path))
-            .current_pos(self.position.1.unwrap_or(self.position.0))
+            .current_pos(self.position.1.take().unwrap_or(self.position.0))
             .show(ctx, |ui| {
                 if self.settings {
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::TOP), |ui| {
@@ -61,8 +61,5 @@ impl FloatingImage {
             });
 
         self.position.0 = response.response.rect.min;
-        if Some(self.position.0) == self.position.1 {
-            self.position.1 = None;
-        }
     }
 }
