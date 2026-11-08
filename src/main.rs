@@ -1,3 +1,7 @@
+mod components;
+
+use components::{FloatingImage, percentage_slider};
+
 struct App {
     transparency: u8,
     floating_images: Vec<FloatingImage>,
@@ -10,50 +14,6 @@ impl App {
             floating_images: vec![],
         }
     }
-}
-
-struct FloatingImage {
-    transparency: u8,
-    path: String,
-}
-
-impl FloatingImage {
-    fn new(path: String) -> Self {
-        Self {
-            transparency: 200,
-            path,
-        }
-    }
-
-    fn ui(&mut self, ctx: &egui::Context) {
-        use egui::Widget;
-
-        egui::Window::new(&self.path)
-            .frame(egui::Frame::new())
-            .show(ctx, |ui| {
-                percentage_slider(&mut self.transparency).ui(ui);
-                egui::Image::new(&self.path)
-                    .tint(egui::Color32::from_white_alpha(self.transparency))
-                    .ui(ui);
-            });
-    }
-}
-
-fn percentage_slider(value: &mut u8) -> egui::Slider<'_> {
-    egui::Slider::new(value, 0..=255)
-        .custom_formatter(|number, _| {
-            format!("{value:.0}%", value = (number as f32 / 255.0) * 100.0)
-        })
-        .custom_parser(|str| {
-            if str.chars().last() == Some('%') {
-                &str[..str.len() - 1]
-            } else {
-                &str
-            }
-            .parse::<f64>()
-            .ok()
-            .map(|number| (number / 100.0) * 255.0)
-        })
 }
 
 impl eframe::App for App {
@@ -90,6 +50,8 @@ impl eframe::App for App {
         for floating_image in floating_images {
             floating_image.ui(ui.ctx());
         }
+
+        self.floating_images.retain(|fi| fi.open);
     }
 }
 
