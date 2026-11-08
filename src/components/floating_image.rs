@@ -31,21 +31,18 @@ impl FloatingImage {
                             self.open = !self.open;
                         }
 
-                        let id = egui::Id::unique("floating_image_anchor_position");
+                        if ui.button("\u{2316}").clicked() {
+                            let id = egui::Id::unique("floating_image_anchor_position");
 
-                        if let Some(position) =
-                            ctx.data_mut(|data| data.get_persisted::<egui::Pos2>(id))
-                        {
-                            if ui.button("Attach here").clicked() {
+                            if let Some(position) =
+                                ctx.data_mut(|data| data.get_persisted::<egui::Pos2>(id))
+                            {
                                 ctx.data_mut(|data| data.remove::<egui::Pos2>(id));
                                 self.position.1 = Some(position);
-                                self.settings = false;
-                            }
-                        } else {
-                            if ui.button("Attach to").clicked() {
+                            } else {
                                 ctx.data_mut(|data| data.insert_persisted(id, self.position.0));
-                                self.settings = false;
                             }
+                            self.settings = false;
                         }
 
                         percentage_slider(&mut self.transparency).ui(ui);
