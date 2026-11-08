@@ -62,9 +62,8 @@ impl FloatingImage {
 
             if image.clicked() {
                 if let Some(position) =
-                    ctx.data_mut(|data| data.get_persisted::<egui::Pos2>(attach_state_id))
+                    ctx.data_mut(|data| data.remove_temp::<egui::Pos2>(attach_state_id))
                 {
-                    ctx.data_mut(|data| data.remove::<egui::Pos2>(attach_state_id));
                     self.attach_state = Some(AttachState::Set(position))
                 }
             }
