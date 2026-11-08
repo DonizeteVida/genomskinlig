@@ -32,19 +32,16 @@ impl eframe::App for App {
         percentage_slider(transparency).ui(ui);
 
         if ui.button("Open file").clicked() {
-            let mut new_floating_images = rfd::FileDialog::new()
-                .pick_files()
-                .as_ref()
-                .map(|path_bufs| {
+            if let Some(new_floating_images) =
+                rfd::FileDialog::new().pick_files().map(|path_bufs| {
                     path_bufs
-                        .iter()
+                        .into_iter()
                         .map(|pb| format!("file://{path}", path = pb.display()))
                         .map(FloatingImage::new)
-                        .collect::<Vec<_>>()
                 })
-                .unwrap_or(vec![]);
-
-            floating_images.append(&mut new_floating_images);
+            {
+                floating_images.extend(new_floating_images);
+            }
         }
 
         for floating_image in floating_images {
