@@ -1478,6 +1478,7 @@ dependencies = [
  "egui_extras",
  "image",
  "rfd",
+ "url",
 ]
 
 [[package]]

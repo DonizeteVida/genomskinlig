@@ -36,7 +36,8 @@ impl eframe::App for App {
                 rfd::FileDialog::new().pick_files().map(|path_bufs| {
                     path_bufs
                         .into_iter()
-                        .map(|pb| format!("file://{path}", path = pb.display()))
+                        .flat_map(url::Url::from_file_path)
+                        .map(|url| url.to_string())
                         .map(FloatingImage::new)
                 })
             {

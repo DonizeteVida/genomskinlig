@@ -10,3 +10,4 @@ egui = "0.37.0"
 eframe = "0.37.0"
 egui_extras = { version = "0.37.0", features = ["default", "all_loaders"] }
 image = { version = "0.25.10", features = ["default"] }
+url = "2.5.8"
